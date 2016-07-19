@@ -125,13 +125,14 @@ function listFiles(auth) {
 /**
  * Download a file's content.
  *
- * @param {File} file Drive File instance.
- * @param {Function} callback Function to call when the request is complete.
+ * @param {String} file Drive File instance's ID.
+ * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
+ * @param {String} Destination file path.
  */
-function downloadFile(fileid, auth) {
+function downloadFile(fileid, auth, destfilepath) {
     var fileId = fileid;
     var service = google.drive('v2');
-    var dest = fs.createWriteStream('downloadedfromdrive.py');
+    var dest = fs.createWriteStream(destfilepath);
     service.files.get({
        fileId: fileId,
        alt: 'media',
@@ -147,12 +148,18 @@ function downloadFile(fileid, auth) {
 
 }
 
-function uploadFile(auth) {
+/**
+ * Upload a file.
+ *
+ * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
+ * @param {String} Source file path.
+ */
+function uploadFile(auth, filepath) {
     var fileMetadata = {
       'name': 'Upload from code'
     };
     var media = {
-      body: fs.createReadStream('uploadfile.txt')
+      body: fs.createReadStream(filepath)
     };
     var service = google.drive('v3');
     service.files.create({
@@ -170,6 +177,12 @@ function uploadFile(auth) {
     });
 }
 
+/**
+ * Delete a file.
+ *
+ * @param {String} file Drive File instance's ID.
+ * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
+ */
 function deleteFile(fileid, auth) {
     var fileId = fileid;
     var service = google.drive('v2');
@@ -185,6 +198,11 @@ function deleteFile(fileid, auth) {
     });
 }
 
+/**
+ * Callback function once authorization is completed.
+ *
+ * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
+ */
 function authorized_callback(auth) {
   console.log('You have been authorized');
   //Call required functions here

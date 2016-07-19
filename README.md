@@ -24,3 +24,8 @@
 
 * You can call the required functions from here such as file list, file download, file upload and file delete.
 * The `auth` dictionary is sent as a parameter to this function which will be used with all the other functions wherever required.
+
+
+###### Note:
+
+A lot of this content is taken from the google-drive-nodejs quickstart guide
